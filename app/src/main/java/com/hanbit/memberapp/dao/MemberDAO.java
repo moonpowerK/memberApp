@@ -1,5 +1,7 @@
 package com.hanbit.memberapp.dao;
 
+import android.content.Context;
+
 import com.hanbit.memberapp.domain.MemberBean;
 
 import java.util.ArrayList;
@@ -11,6 +13,10 @@ import java.util.List;
 
 public class MemberDAO {
 
+    public MemberDAO(Context applicationContext) {
+        //db키넣으면 끄으으으으으~
+    }
+
     public MemberBean detail(String id){
         MemberBean member = new MemberBean();
         return member;
@@ -20,6 +26,7 @@ public class MemberDAO {
         return list;
     }
     public void join(MemberBean param){}
+
     public List<MemberBean>  list(){
         List<MemberBean> list = new ArrayList<MemberBean>();
         return list;

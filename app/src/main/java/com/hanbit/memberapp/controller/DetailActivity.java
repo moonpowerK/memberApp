@@ -8,16 +8,24 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.hanbit.memberapp.R;
+import com.hanbit.memberapp.domain.MemberBean;
+import com.hanbit.memberapp.service.MemberService;
+import com.hanbit.memberapp.service.MemberServiceImpl;
 
 public class DetailActivity extends AppCompatActivity implements View.OnClickListener{
 
     Button btList, btDelete, btUpdate, btMessage, btMap, btCall;
     TextView tvAddr, tvTel, tvName, tvPass, tvID;
+    MemberService service;
+    MemberBean member;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+
+        service = new MemberServiceImpl(this.getApplicationContext());
+        member = service.detail("hi");
 
         btList = (Button) findViewById(R.id.btList);
         btDelete = (Button) findViewById(R.id.btDelete);
@@ -31,6 +39,12 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
         tvPass = (TextView) findViewById(R.id.tvPass);
         tvID = (TextView) findViewById(R.id.tvID);
 
+        tvID.setText(member.getId());
+        tvPass.setText(member.getPass());
+        tvAddr.setText(member.getAddr());
+        tvName.setText(member.getName());
+        tvTel.setText(member.getPhone());
+
         btList.setOnClickListener(this);
         btDelete.setOnClickListener(this);
         btUpdate.setOnClickListener(this);
@@ -42,22 +56,22 @@ public class DetailActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
-        int id = v.getId();
+        String addr = tvAddr.getText().toString();
+        String tel = tvTel.getText().toString();
+        String name = tvName.getText().toString();
+        String pass = tvPass.getText().toString();
+        String id = tvID.getText().toString();
 
-        String tvAddrv = tvAddr.getText().toString();
-        String tvTelv = tvTel.getText().toString();
-        String tvNamev = tvName.getText().toString();
-        String tvPassv = tvPass.getText().toString();
-        String tvIDv = tvID.getText().toString();
-
-        switch (id){
+        switch (v.getId()){
             case R.id.btList :
                 this.startActivity(new Intent(DetailActivity.this,ListActivity.class));
                 break;
             case R.id.btDelete :
+                service.delete(tvID.getText().toString());
+                startActivity(new Intent(DetailActivity.this, ListActivity.class));
                 break;
             case R.id.btUpdate :
-                this. startActivity(new Intent(DetailActivity.this, UpdateActivity.class));
+                startActivity(new Intent(DetailActivity.this, UpdateActivity.class));
                 break;
             case R.id.btMessage :
                 break;

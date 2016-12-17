@@ -3,16 +3,23 @@ package com.hanbit.memberapp.controller;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.hanbit.memberapp.R;
+import com.hanbit.memberapp.domain.MemberBean;
+import com.hanbit.memberapp.service.MemberService;
+import com.hanbit.memberapp.service.MemberServiceImpl;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     EditText etLoingId, etLoinPass;
     Button btLogin;
+    MemberService service;
+    MemberBean member;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,18 +33,32 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         etLoingId.setOnClickListener(this);
         etLoinPass.setOnClickListener(this);
         btLogin.setOnClickListener(this);
+
+        service = new MemberServiceImpl(this.getApplicationContext());
+        member = new MemberBean();
+
     }
 
     @Override
     public void onClick(View v) {
-        int id = v.getId();
+        String id = btLogin.getText().toString();
+        String pass= etLoinPass.getText().toString();
 
-        String btLoginV = btLogin.getText().toString();
-        String etLoinPassV = etLoinPass.getText().toString();
+        Log.d("넘어온 ID : " , id);
+        Log.d("넘어온 PASS : " , pass);
 
-        switch (id){
+        member.setId(id);
+        member.setPass(pass);
+
+        switch (v.getId()){
             case R.id.btLogin :
-                startActivity(new Intent(LoginActivity.this, ListActivity.class));
+              boolean flag = service.login(member);
+                if(flag){
+                    startActivity(new Intent(LoginActivity.this, ListActivity.class));
+                    Toast.makeText(LoginActivity.this, "로그인 성공 ", Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(LoginActivity.this, "로그인 실패 ", Toast.LENGTH_LONG).show();
+                }
                 break;
         }
     }
